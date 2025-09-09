@@ -10,6 +10,7 @@ import { TaskEditor } from '@/components/TaskEditor';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { LayoutGrid, List } from 'lucide-react';
+import { SignOutButton } from '@clerk/nextjs';
 
 export default function Home() {
   const [editingTask, setEditingTask] = useState<Task | null>(null);

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Search, Moon, Sun, Monitor, Plus } from 'lucide-react';
+import { Search, Moon, Sun, Monitor, Plus, LogOut, User, Settings } from 'lucide-react';
 import { useTheme } from '@/components/providers/ThemeProvider';
 import { useTaskContext } from '@/context/TaskContext';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
+import { SignOutButton, useUser } from '@clerk/nextjs';
 
 interface HeaderProps {
   onAddTask: () => void;
@@ -20,6 +22,7 @@ interface HeaderProps {
 export function Header({ onAddTask }: HeaderProps) {
   const { theme, setTheme } = useTheme();
   const { searchFilters, setSearchFilters } = useTaskContext();
+  const { user } = useUser();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchFilters(prev => ({
@@ -94,6 +97,33 @@ export function Header({ onAddTask }: HeaderProps) {
                 <Monitor className="mr-2 h-4 w-4" />
                 System
               </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
+                <div className="h-10 w-10 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 flex items-center justify-center text-white font-semibold text-sm">
+                  {user?.firstName?.charAt(0) || user?.emailAddresses[0]?.emailAddress.charAt(0) || 'U'}
+                </div>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+              <div className="flex items-center justify-start gap-2 p-2">
+                <div className="flex flex-col space-y-1 leading-none">
+                  <p className="font-medium">{user?.firstName} {user?.lastName}</p>
+                  <p className="w-[200px] truncate text-sm text-muted-foreground">
+                    {user?.emailAddresses[0]?.emailAddress}
+                  </p>
+                </div>
+              </div>
+              <DropdownMenuSeparator />
+              <SignOutButton>
+                <DropdownMenuItem className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-950">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Sign out</span>
+                </DropdownMenuItem>
+              </SignOutButton>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

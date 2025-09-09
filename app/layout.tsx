@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import { TaskProvider } from '@/context/TaskContext';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { OfflineIndicator } from '@/components/OfflineIndicator';
+import { ClerkProvider } from '@clerk/nextjs';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,20 +31,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="apple-touch-icon" sizes="180x180" href="/icon-192x192.png" />
-      </head>
-      <body className={inter.className}>
-        <ThemeProvider defaultTheme="system" storageKey="taskflow-theme">
-          <TaskProvider>
-            <div className="min-h-screen bg-background">
-              {children}
-              <OfflineIndicator />
-            </div>
-          </TaskProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <link rel="apple-touch-icon" sizes="180x180" href="/icon-192x192.png" />
+        </head>
+        <body className={inter.className}>
+          <ThemeProvider defaultTheme="system" storageKey="taskflow-theme">
+            <TaskProvider>
+              <div className="min-h-screen bg-background">
+                {children}
+                <OfflineIndicator />
+              </div>
+            </TaskProvider>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
